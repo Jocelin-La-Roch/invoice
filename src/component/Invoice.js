@@ -1,10 +1,11 @@
 import { Divider, Paper, Grid, Select, FormControl, MenuItem, InputLabel, TextField, Button} from '@material-ui/core'
 import React, { PureComponent } from 'react'
-import { Add } from '@material-ui/icons';
+import { Add, Clear } from '@material-ui/icons';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import logo from "../logo.svg"
 import { DatePicker } from '@mui/lab';
+import { IconButton } from '@mui/material';
 
 class Invoice extends React.Component {
     constructor(props) {
@@ -13,6 +14,8 @@ class Invoice extends React.Component {
         this.state = {
             date: "",
             dDate: "",
+            items: [],
+            types: ["App Design", "App Develop", "App prod"],
         }
     }
 
@@ -165,58 +168,130 @@ class Invoice extends React.Component {
                     paddingTop: "30px",
                     paddingBottom: "30px"
                 }}>
-                    <div>
-                        <div style={{display: "flex", justifyContent: "flex-start"}}>Item</div>
-                        <div style={{height: "10px"}}></div>
-                        <FormControl fullWidth>
-                            <Select
-                                className=""
-                                variant="outlined"
-                                disableUnderline
-                                labelId='label'
-                                id="select"
-                                value= {1}
-                                onChange={()=>{}}>
-                                <MenuItem value={1}>App design </MenuItem>
-                                <MenuItem value={2}>App develop</MenuItem>
-                                <MenuItem value={3}>App Prod</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <div style={{height: "20px"}}></div>
-                        <TextField
-                         fullWidth 
-                         variant="outlined" 
-                         placeholder="Customization & Bug Fixes"/>
-                    </div>
-                    <div style={{height: "20px"}}></div>
-                    <div>
-                        <div style={{display: "flex", justifyContent: "flex-start"}}>Cost</div>
-                        <div style={{height: "10px"}}></div>
-                        <TextField
-                         fullWidth 
-                         variant="outlined" 
-                         type="number"
-                         placeholder={24}/>
-                    </div>
-                    <div style={{height: "20px"}}></div>
-                    <div style={{display: "flex", justifyContent: "flex-start"}}>Discount: 0% 0% 0%</div>
-                    <div style={{height: "20px"}}></div>
-                    <div>
-                        <div style={{display: "flex", justifyContent: "flex-start"}}>Qty</div>
-                        <div style={{height: "10px"}}></div>
-                        <TextField
-                         fullWidth 
-                         variant="outlined" 
-                         type="number"
-                         placeholder={1}/>
-                    </div>
-                    <div style={{height: "20px"}}></div>
-                    <div style={{display: "flex", justifyContent: "flex-start"}}>Price</div>
-                    <div style={{height: "10px"}}></div>
-                    <div style={{display: "flex", justifyContent: "flex-start"}}>$24.00</div>
+
+                    {
+                        this.state.items.length !==0 && 
+                        <>
+                            {
+                                this.state.items.map((item, index) => {
+                                    return(
+                                        <>
+                                            <div>
+                                                <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+                                                    <div>Item</div>
+                                                    <div>
+                                                        <IconButton onClick={() => {
+                                                            let tempon = this.state.items;
+                                                            tempon.splice(index, 1);
+                                                            this.setState({
+                                                                items: tempon
+                                                            })
+                                                        }}>
+                                                            <Clear />
+                                                        </IconButton>
+                                                    </div>
+                                                </div>
+                                                <div style={{height: "10px"}}></div>
+                                                <FormControl fullWidth>
+                                                    <Select
+                                                        className=""
+                                                        variant="outlined"
+                                                        disableUnderline
+                                                        labelId='label'
+                                                        id="select"
+                                                        value= {this.state.types.indexOf(this.state.items[index].type)}
+                                                        onChange={(event)=>{
+                                                            let tempon = this.state.items;
+                                                            tempon[index].type = this.state.types[event.target.value];
+                                                            this.setState({
+                                                                items: tempon
+                                                            })
+                                                        }}>
+                                                            {
+                                                                this.state.types.map((type, i) => {
+                                                                    return(
+                                                                        <MenuItem value={i}>{type}</MenuItem>
+                                                                    );
+                                                                })
+                                                            }
+                                                    </Select>
+                                                </FormControl>
+                                                <div style={{height: "20px"}}></div>
+                                                <TextField
+                                                fullWidth 
+                                                variant="outlined" 
+                                                placeholder="Customization & Bug Fixes"
+                                                onChange={(event) => {
+                                                    let tempon = this.state.items;
+                                                    tempon[index].custom = event.target.value;
+                                                    this.setState({
+                                                        items: tempon
+                                                    });
+                                                }}/>
+                                            </div>
+                                            <div style={{height: "20px"}}></div>
+                                            <div>
+                                                <div style={{display: "flex", justifyContent: "flex-start"}}>Cost</div>
+                                                <div style={{height: "10px"}}></div>
+                                                <TextField
+                                                fullWidth 
+                                                variant="outlined" 
+                                                type="number"
+                                                placeholder={24}
+                                                onChange={(event) => {
+                                                    let tempon = this.state.items;
+                                                    tempon[index].cost = event.target.value;
+                                                    this.setState({
+                                                        items: tempon
+                                                    });
+                                                }}/>
+                                            </div>
+                                            <div style={{height: "20px"}}></div>
+                                            <div style={{display: "flex", justifyContent: "flex-start"}}>Discount: 0% 0% 0%</div>
+                                            <div style={{height: "20px"}}></div>
+                                            <div>
+                                                <div style={{display: "flex", justifyContent: "flex-start"}}>Qty</div>
+                                                <div style={{height: "10px"}}></div>
+                                                <TextField
+                                                fullWidth 
+                                                variant="outlined" 
+                                                type="number"
+                                                placeholder={1}
+                                                onChange={(event) => {
+                                                    let tempon = this.state.items;
+                                                    tempon[index].qty = event.target.value;
+                                                    this.setState({
+                                                        items: tempon
+                                                    });
+                                                }}/>
+                                            </div>
+                                            <div style={{height: "20px"}}></div>
+                                            <div style={{display: "flex", justifyContent: "flex-start"}}>Price</div>
+                                            <div style={{height: "10px"}}></div>
+                                            <div style={{display: "flex", justifyContent: "flex-start"}}>${this.state.items[index].cost * this.state.items[index].qty}</div>
+                                            <div style={{height: "30px"}}></div>
+                                        </>
+                                    );
+                                })
+                            }
+                        </>
+                    }
+                    
                     <div style={{height: "20px"}}></div>
                     <div style={{display: "flex", justifyContent: "flex-start"}}>
-                        <Button color="primary" variant="contained" startIcon={<Add/>}>Add item</Button>
+                        <Button color="primary" variant="contained" startIcon={<Add/>} onClick={()=> {
+                            let tempon = this.state.items;
+                            tempon.push({
+                                type: this.state.types[0],
+                                custom: "",
+                                cost: 0,
+                                qty: 1,
+                                price: 24.00
+                            });
+                            this.setState({
+                                items: tempon
+                            })
+                        }}>Add item</Button>
                     </div>
                 </div>
                 
