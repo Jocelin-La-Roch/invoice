@@ -16,6 +16,7 @@ class Invoice extends React.Component {
             dDate: "",
             items: [],
             types: ["App Design", "App Develop", "App prod"],
+            invoice: "",
         }
     }
 
@@ -41,16 +42,17 @@ class Invoice extends React.Component {
                             <div item>
                                 <div style={{
                                     backgroundColor: "rgb(187, 187, 187)",
-                                    border: "1px solid rgb(112, 112, 112)",
-                                    borderRadius: "2px",
-                                    width: "235px",
-                                    paddingTop: "15px",
-                                    paddingLeft: "15px",
-                                    paddingBottom: "15px",
-                                    display: "flex",
-                                    justifyContent: "start"
+                                    width: "250px",
                                 }}>
-                                    # 5007
+                                    <TextField
+                                        fullWidth 
+                                        variant="outlined" 
+                                        placeholder="# 5007"
+                                        onChange={(event) => {
+                                            this.setState({
+                                                invoice: event.target.value
+                                            });
+                                        }}/>
                                 </div>
                             </div>
                         </div>
